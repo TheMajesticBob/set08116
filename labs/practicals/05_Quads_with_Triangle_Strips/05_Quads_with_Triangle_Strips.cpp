@@ -13,12 +13,20 @@ bool load_content() {
   // *********************************
   // Set geometry type to triangle strip
 
+	geom.set_type(GL_TRIANGLE_FAN);
   // *********************************
   // Positions
   vector<vec3> positions{
       // *********************************
       // Add the position data for two triangles here
 
+	  vec3(0.0f,2.0f,0.0f),
+	  vec3(2.5f,-1.0f,0.0f),
+	  vec3(2.0f,-1.5f,0.0f),
+	  vec3(1.0f,-2.0f,0.0f),
+	  vec3(-1.0f,-2.0f,0.0f),
+	  vec3(-2.0f,-1.5f,0.0f),
+	  vec3(-2.5f,-1.0f,0.0f)
       // *********************************
   };
   // Colours
@@ -28,6 +36,7 @@ bool load_content() {
   geom.add_buffer(positions, BUFFER_INDEXES::POSITION_BUFFER);
   geom.add_buffer(colours, BUFFER_INDEXES::COLOUR_BUFFER);
 
+
   // Load in shaders
   eff.add_shader("shaders/basic.vert", GL_VERTEX_SHADER);
   eff.add_shader("shaders/basic.frag", GL_FRAGMENT_SHADER);
@@ -35,7 +44,7 @@ bool load_content() {
   eff.build();
 
   // Set camera properties
-  cam.set_position(vec3(10.0f, 10.0f, 10.0f));
+  cam.set_position(vec3(0.0f, 0.0f, -10.0f));
   cam.set_target(vec3(0.0f, 0.0f, 0.0f));
   auto aspect = static_cast<float>(renderer::get_screen_width()) / static_cast<float>(renderer::get_screen_height());
   cam.set_projection(quarter_pi<float>(), aspect, 2.414f, 1000.0f);

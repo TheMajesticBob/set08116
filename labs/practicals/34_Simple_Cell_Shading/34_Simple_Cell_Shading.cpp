@@ -48,7 +48,7 @@ bool load_content() {
   geom.add_buffer(normals, BUFFER_INDEXES::NORMAL_BUFFER);
 
   // Create mesh object
-  m = mesh(geom);
+  m = mesh(geometry_builder::create_box());
 
   // Load in simple cell shader
   eff.add_shader("34_Simple_Cell_Shading/simple_cell.vert", GL_VERTEX_SHADER);
@@ -94,9 +94,9 @@ bool render() {
 
   // *********************************
   // Bind texture to renderer
-
+  renderer::bind(tex, 0);
   // Set the texture value for the shader here
-
+  glUniform1i(eff.get_uniform_location("tex"), 0);
   // *********************************
 
   // Render the mesh
