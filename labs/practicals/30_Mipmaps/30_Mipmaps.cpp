@@ -29,9 +29,9 @@ bool load_content() {
   // Create three mesh objects - reuse geometry
   for (auto &m : meshes) {
     // *********************************
-
+	  m = mesh(geom);
     // Scale each mesh by 10
-
+	  m.get_transform().scale = vec3(10.f);
     // *********************************
   }
 

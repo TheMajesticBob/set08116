@@ -20,23 +20,52 @@ bool load_content() {
       // *********************************
       // Add the position data for triangles here, (6 verts per side)
       // Front
+	  vec3(1.0f,-1.0f,1.0f),
+	  vec3(1.0f,1.0f,1.0f),
+	  vec3(-1.0f,-1.0f,1.0f),
+	  vec3(-1.0f,-1.0f,1.0f),
+	  vec3(1.0f,1.0f,1.0f),
+	  vec3(-1.0f,1.0f,1.0f),
 
+	  // Back
+	  vec3(1.0f,-1.0f,-1.0f),
+	  vec3(-1.0f,-1.0f,-1.0f),
+	  vec3(1.0f,1.0f,-1.0f),
+	  vec3(-1.0f,-1.0f,-1.0f),
+	  vec3(-1.0f,1.0f,-1.0f),
+	  vec3(1.0f,1.0f,-1.0f),
 
-      // Back
+	  // Right
+	  vec3(1.0f,-1.0f,-1.0f),
+	  vec3(1.0f,1.0f,-1.0f),
+	  vec3(1.0f,1.0f,1.0f),
+	  vec3(1.0f,-1.0f,-1.0f),
+	  vec3(1.0f,1.0f,1.0f),
+	  vec3(1.0f,-1.0f,1.0f),
 
+	  // Left
+	  vec3(-1.0f,-1.0f,1.0f),
+	  vec3(-1.0f,1.0f,1.0f),
+	  vec3(-1.0f,-1.0f,-1.0f),
+	  vec3(-1.0f,1.0f,1.0f),
+	  vec3(-1.0f,1.0f,-1.0f),
+	  vec3(-1.0f,-1.0f,-1.0f),
 
-      // Right
+	  // Top
+	  vec3(-1.0f,1.0f,-1.0f),
+	  vec3(-1.0f,1.0f,1.0f),
+	  vec3(1.0f,1.0f,1.0f),
+	  vec3(-1.0f,1.0f,-1.0f),
+	  vec3(1.0f,1.0f,1.0f),
+	  vec3(1.0f,1.0f,-1.0f),
 
-
-      // Left
-
-
-      // Top
-
-
-      // Bottom
-
-
+	  // Bottom
+	  vec3(-1.0f,-1.0f,-1.0f),
+	  vec3(1.0f,-1.0f,-1.0f),
+	  vec3(1.0f,-1.0f,1.0f),
+	  vec3(-1.0f,-1.0f,-1.0f),
+	  vec3(1.0f,-1.0f,1.0f),
+	  vec3(-1.0f,-1.0f,1.0f),
       // *********************************
   };
   // Colours
@@ -69,34 +98,40 @@ bool update(float delta_time) {
   // Arrow Keys - rotation
   // O decrease scale, P increase scale
 
+  // Check if key is pressed
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_UP)) {
+		pos += vec3(0.0f, 0.0f, -5.0f) * delta_time;
+	}
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_DOWN)) {
+		pos += vec3(0.0f, 0.0f, 5.0f) * delta_time;
+	}
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_LEFT)) {
+		pos += vec3(-5.0f, 0.0f, 0.0f) * delta_time;
+	}
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_RIGHT)) {
+		pos += vec3(5.0f, 0.0f, 0.0f) * delta_time;
+	}
+
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_W)) {
+		theta -= pi<float>() * delta_time;
+	}
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_S)) {
+		theta += pi<float>() * delta_time;
+	}
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_D)) {
+		rho -= pi<float>() * delta_time;
+	}
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_A)) {
+		rho += pi<float>() * delta_time;
+	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_O)) {
+		s -= delta_time;
+	}
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_P)) {
+		s += delta_time;
+	}
 
   // *********************************
   // Update the camera
@@ -111,8 +146,11 @@ bool render() {
   // *********************************
   // Create transformation matrix
 
+  T = translate(mat4(1.0f), pos);
+  R = eulerAngleXZ(theta, rho);
+  S = scale(mat4(1.0f), vec3(1.0f) * s);
 
-
+  M = T * (R * S);
 
   // *********************************
   // Create MVP matrix

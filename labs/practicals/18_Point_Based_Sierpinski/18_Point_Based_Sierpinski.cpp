@@ -8,6 +8,9 @@ using namespace glm;
 geometry geom;
 effect eff;
 target_camera cam;
+float s = 0.0f;
+float total_time = 0.0f;
+float theta = 0.0f;
 
 const int num_points = 50000;
 
@@ -28,14 +31,17 @@ void create_sierpinski(geometry &geom) {
   for (auto i = 1; i < num_points; ++i) {
     // *********************************
     // Add random point
-
+	  vec3 point = (points[i - 1]+v[dist(e)]) / 2.0f;
+	  points.push_back(point);
     // Add colour - all points red
-
+	  vec4 color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	  colours.push_back(color);
     // *********************************
   }
   // *********************************
   // Add buffers to geometry
-
+  geom.add_buffer(points, BUFFER_INDEXES::POSITION_BUFFER);
+  geom.add_buffer(colours, BUFFER_INDEXES::COLOUR_BUFFER);
 
   // *********************************
 }
@@ -61,6 +67,14 @@ bool load_content() {
 }
 
 bool update(float delta_time) {
+	// Accumulate time
+	total_time += delta_time;
+	// Update the scale - base on sin wave
+	s = 1.0f + sinf(total_time);
+	// Multiply by 5
+	s *= 5.0f;
+	// Increment theta - half a rotation per second
+	theta += pi<float>() * delta_time;
   // Update the camera
   cam.update(delta_time);
   return true;
@@ -70,7 +84,14 @@ bool render() {
   // Bind effect
   renderer::bind(eff);
   // Create MVP matrix
-  mat4 M(1.0f);
+  mat4 T, R, S, M;
+  // *********************************
+  // Create transformation matrices
+  // ******************************
+  R = rotate(mat4(1.0f), theta, vec3(0.0f, 0.0f, 1.0f));
+  S = scale(mat4(1.0f), s * vec3(1.0f, 1.0f, 1.0f));
+
+  M = (R * S);
   auto V = cam.get_view();
   auto P = cam.get_projection();
   auto MVP = P * V * M;

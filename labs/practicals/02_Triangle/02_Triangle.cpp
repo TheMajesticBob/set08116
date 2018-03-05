@@ -15,7 +15,9 @@ bool load_content() {
   vector<vec3> positions{
       // *********************************
       // Add the three positions of the triangle corners here
-
+	  vec3(0.0f,1.0f,0.0f),
+	  vec3(-1.0f,-1.0f,0.0f),
+	  vec3(1.0f,-1.0f,0.0f)
       // *********************************
   };
   // Colours
@@ -23,7 +25,7 @@ bool load_content() {
   // Add to the geometry
   geom.add_buffer(positions, BUFFER_INDEXES::POSITION_BUFFER);
   geom.add_buffer(colours, BUFFER_INDEXES::COLOUR_BUFFER);
-
+  
   // Load in shaders
   eff.add_shader("shaders/basic.vert", // filename
                  GL_VERTEX_SHADER);    // type

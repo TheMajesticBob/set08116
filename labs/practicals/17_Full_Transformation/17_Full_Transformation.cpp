@@ -74,7 +74,11 @@ bool render() {
   // *********************************
   // Create transformation matrices
   // ******************************
+  T = translate(mat4(1.0f), pos);
+  R = rotate(mat4(1.0f), theta, vec3(0.0f, 0.0f, 1.0f));
+  S = scale(mat4(1.0f), s * vec3(1.0f, 1.0f, 1.0f));
 
+  M = T * (R * S);
 
 
   // Combine matrices to set M - remember multiplication order
