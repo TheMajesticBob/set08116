@@ -68,16 +68,18 @@ bool update(float delta_time) {
 
   // *********************************
   // Update the camera
+  cam.update(delta_time);
 
   // If mouse button pressed get ray and check for intersection
-
+  if( glfwGetMouseButton(renderer::get_window(), 0) == GLFW_PRESS) {
     // Create two doubles to store mouse Position X and Y
-
+	  double mouse_X, mouse_Y;
 
     // Get the mouse position from glfw, store in to the doubles.
-
+	  glfwGetCursorPos(renderer::get_window(), &mouse_X, &mouse_Y);
     // Crate two vec3 to store Origin and direction of the ray
 
+	  vec3 origin, direction;
 
     // *********************************
     // Convert mouse position to ray

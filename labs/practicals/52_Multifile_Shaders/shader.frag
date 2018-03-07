@@ -83,18 +83,24 @@ layout(location = 0) out vec4 colour;
 void main() {
   // *********************************
   // Calculate view direction
-
+  vec3 view_dir = normalize( eye_pos - position );
   // Sample texture
-
+  vec4 tex_colour = texture( tex, tex_coord );
   // Calculate directional light colour
-
+  vec4 directional = calculate_direction( light, mat, normal, view_dir, tex_colour );
   // Sum point lights
-
-
+  vec4 point = calculate_point( points[0], mat, position, normal, view_dir, tex_colour ) +
+					calculate_point( points[1], mat, position, normal, view_dir, tex_colour ) +
+					calculate_point( points[2], mat, position, normal, view_dir, tex_colour ) +
+					calculate_point( points[3], mat, position, normal, view_dir, tex_colour );
 
   // Sum spot lights
+  vec4 spot = calculate_spot( spots[0], mat, position, normal, view_dir, tex_colour ) +
+					calculate_spot( spots[1], mat, position, normal, view_dir, tex_colour ) +
+					calculate_spot( spots[2], mat, position, normal, view_dir, tex_colour ) +
+					calculate_spot( spots[3], mat, position, normal, view_dir, tex_colour ) +
+					calculate_spot( spots[4], mat, position, normal, view_dir, tex_colour );
 
-
-
+	colour = directional + point + spot;
   // *********************************
 }

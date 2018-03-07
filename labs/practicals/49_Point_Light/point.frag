@@ -39,23 +39,33 @@ layout(location = 0) out vec4 colour;
 void main() {
   // *********************************
   // Get distance between point light and vertex
-
+  float dist = distance(position, point.position);
   // Calculate attenuation factor
-
+  float attentuation = 1 / (point.constant + point.linear * dist + point.quadratic * dist * dist );
   // Calculate light colour
-
-
+  vec4 light_colour = point.light_colour * attentuation;
   // Calculate light dir
-
+  vec3 light_dir = normalize( point.position - position );
   // Now use standard phong shading but using calculated light colour and direction
   // - note no ambient
-
-
-
-
-
-
-
-
+  float k;
+  // Calculate diffuse component
+  k = max( dot( normal, light_dir ), 0 );
+  vec4 diffuse = k * mat.diffuse_reflection * light_colour;
+  // Calculate view direction
+  vec3 view_dir = normalize( eye_pos - position );
+  // Calculate half vector
+  vec3 half_vector = normalize( view_dir + light_dir );
+  // Calculate specular component
+  k = pow( max( dot( normal, half_vector ), 0 ), mat.shininess );
+  vec4 specular = k * (mat.specular_reflection * light_colour );
+  // Sample texture
+  vec4 tex_sample = texture( tex, tex_coord );
+  // Calculate primary colour component
+  vec4 primary = mat.emissive + diffuse;
+  // Calculate final colour - remember alpha
+  primary.a = 1;
+  specular.a = 1;
+  colour = tex_sample * primary + specular;
   // *********************************
 }
